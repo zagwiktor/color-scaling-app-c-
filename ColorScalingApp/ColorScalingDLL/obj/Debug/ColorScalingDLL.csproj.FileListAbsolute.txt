@@ -1,0 +1,6 @@
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingDLL\bin\Debug\ColorScalingDLL.dll
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingDLL\bin\Debug\ColorScalingDLL.pdb
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingDLL\obj\Debug\ColorScalingDLL.csproj.AssemblyReference.cache
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingDLL\obj\Debug\ColorScalingDLL.csproj.CoreCompileInputs.cache
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingDLL\obj\Debug\ColorScalingDLL.dll
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingDLL\obj\Debug\ColorScalingDLL.pdb
