@@ -43,6 +43,7 @@
             this.modifiedImgLabel = new System.Windows.Forms.Label();
             this.scaleRgbButton = new System.Windows.Forms.Button();
             this.numOfThreadsBox = new System.Windows.Forms.GroupBox();
+            this.defNumOfThreads = new System.Windows.Forms.RadioButton();
             this.thred64 = new System.Windows.Forms.RadioButton();
             this.thred32 = new System.Windows.Forms.RadioButton();
             this.thred16 = new System.Windows.Forms.RadioButton();
@@ -50,13 +51,16 @@
             this.thred4 = new System.Windows.Forms.RadioButton();
             this.thred2 = new System.Windows.Forms.RadioButton();
             this.thred1 = new System.Windows.Forms.RadioButton();
-            this.defNumOfThreads = new System.Windows.Forms.RadioButton();
+            this.chooseDllBox = new System.Windows.Forms.GroupBox();
+            this.asmRButton = new System.Windows.Forms.RadioButton();
+            this.cRButton = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.oryginalImageField)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.modifiedImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarRed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarGreen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarBlue)).BeginInit();
             this.numOfThreadsBox.SuspendLayout();
+            this.chooseDllBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // oryginalImageField
@@ -206,6 +210,17 @@
             this.numOfThreadsBox.TabStop = false;
             this.numOfThreadsBox.Text = "Number of threads";
             // 
+            // defNumOfThreads
+            // 
+            this.defNumOfThreads.AutoSize = true;
+            this.defNumOfThreads.Location = new System.Drawing.Point(6, 42);
+            this.defNumOfThreads.Name = "defNumOfThreads";
+            this.defNumOfThreads.Size = new System.Drawing.Size(147, 17);
+            this.defNumOfThreads.TabIndex = 24;
+            this.defNumOfThreads.TabStop = true;
+            this.defNumOfThreads.Text = "Default number of threads";
+            this.defNumOfThreads.UseVisualStyleBackColor = true;
+            // 
             // thred64
             // 
             this.thred64.AutoSize = true;
@@ -283,22 +298,45 @@
             this.thred1.Text = "1";
             this.thred1.UseVisualStyleBackColor = true;
             // 
-            // defNumOfThreads
+            // chooseDllBox
             // 
-            this.defNumOfThreads.AutoSize = true;
-            this.defNumOfThreads.Location = new System.Drawing.Point(6, 42);
-            this.defNumOfThreads.Name = "defNumOfThreads";
-            this.defNumOfThreads.Size = new System.Drawing.Size(147, 17);
-            this.defNumOfThreads.TabIndex = 24;
-            this.defNumOfThreads.TabStop = true;
-            this.defNumOfThreads.Text = "Default number of threads";
-            this.defNumOfThreads.UseVisualStyleBackColor = true;
+            this.chooseDllBox.Controls.Add(this.cRButton);
+            this.chooseDllBox.Controls.Add(this.asmRButton);
+            this.chooseDllBox.Location = new System.Drawing.Point(64, 554);
+            this.chooseDllBox.Name = "chooseDllBox";
+            this.chooseDllBox.Size = new System.Drawing.Size(206, 52);
+            this.chooseDllBox.TabIndex = 25;
+            this.chooseDllBox.TabStop = false;
+            this.chooseDllBox.Text = "DLL";
+            // 
+            // asmRButton
+            // 
+            this.asmRButton.AutoSize = true;
+            this.asmRButton.Location = new System.Drawing.Point(43, 19);
+            this.asmRButton.Name = "asmRButton";
+            this.asmRButton.Size = new System.Drawing.Size(48, 17);
+            this.asmRButton.TabIndex = 0;
+            this.asmRButton.TabStop = true;
+            this.asmRButton.Text = "ASM";
+            this.asmRButton.UseVisualStyleBackColor = true;
+            // 
+            // cRButton
+            // 
+            this.cRButton.AutoSize = true;
+            this.cRButton.Location = new System.Drawing.Point(117, 19);
+            this.cRButton.Name = "cRButton";
+            this.cRButton.Size = new System.Drawing.Size(39, 17);
+            this.cRButton.TabIndex = 1;
+            this.cRButton.TabStop = true;
+            this.cRButton.Text = "C#";
+            this.cRButton.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(729, 594);
+            this.ClientSize = new System.Drawing.Size(729, 647);
+            this.Controls.Add(this.chooseDllBox);
             this.Controls.Add(this.numOfThreadsBox);
             this.Controls.Add(this.scaleRgbButton);
             this.Controls.Add(this.modifiedImgLabel);
@@ -323,6 +361,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBarBlue)).EndInit();
             this.numOfThreadsBox.ResumeLayout(false);
             this.numOfThreadsBox.PerformLayout();
+            this.chooseDllBox.ResumeLayout(false);
+            this.chooseDllBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -353,6 +393,9 @@
         private System.Windows.Forms.RadioButton thred4;
         private System.Windows.Forms.RadioButton thred64;
         private System.Windows.Forms.RadioButton defNumOfThreads;
+        private System.Windows.Forms.GroupBox chooseDllBox;
+        private System.Windows.Forms.RadioButton cRButton;
+        private System.Windows.Forms.RadioButton asmRButton;
     }
 }
 

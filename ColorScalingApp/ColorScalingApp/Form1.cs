@@ -19,9 +19,19 @@ namespace ColorScalingApp
         {
             if (originalImage != null)
             {
-                modifiedImage = colorScalingDLL.AdjustColors(originalImage, trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value, numOfThreds());
-                modifiedImageBox.SizeMode = PictureBoxSizeMode.Zoom;
-                modifiedImageBox.Image = new Bitmap(modifiedImage);
+                if (asmRButton.Checked)
+                {
+                    modifiedImage = colorScalingDLL.ColorsAsm(originalImage, trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value, numOfThreds());
+                    modifiedImageBox.SizeMode = PictureBoxSizeMode.Zoom;
+                    modifiedImageBox.Image = new Bitmap(modifiedImage);
+                }
+                if (cRButton.Checked) 
+                {
+                    modifiedImage = colorScalingDLL.AdjustColors(originalImage, trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value, numOfThreds());
+                    modifiedImageBox.SizeMode = PictureBoxSizeMode.Zoom;
+                    modifiedImageBox.Image = new Bitmap(modifiedImage);
+                }
+                
             }
         }
        
@@ -52,7 +62,6 @@ namespace ColorScalingApp
             modifiedImageBox.Image = null;
             originalImage = null;
             modifiedImage = null;
-
         }
 
         private void scaleRgbButton_Click(object sender, EventArgs e)
@@ -61,7 +70,6 @@ namespace ColorScalingApp
             setModifiedImage();
             watch.Stop();
             MessageBox.Show("threads: " + numOfThreds() + ", time elapsed: " + watch.ElapsedMilliseconds + "ms", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -123,6 +131,6 @@ namespace ColorScalingApp
             return processorCount;
         }
 
-
+   
     }
 }

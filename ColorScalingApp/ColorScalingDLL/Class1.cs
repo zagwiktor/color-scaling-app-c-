@@ -9,10 +9,11 @@ namespace ColorScalingDLL
 {
     public class Class1
     {
-       
+        [DllImport(@"C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\x64\Release\AsmDLL.dll")]
+        static extern int AdjustColorsAsm(IntPtr imageBuffer, int pixelCount, float redMultiplier, float greenMultiplier, float blueMultiplier);
+
         public Bitmap AdjustColors(Bitmap originalImage, int trackBarRed, int trackBarGreen, int trackBarBlue, int numOfThreads)
         {
-           
             int defaultRedValue = 0;
             int defaultGreenValue = 0;
             int defaultBlueValue = 0;
@@ -46,28 +47,53 @@ namespace ColorScalingDLL
                 for (int x = 0; x < width; x++)
                 {
                     int index = y * stride + x * bytesPerPixel;
-
                     int newRed = (int)(originalPixels[index + 2] * redFactor);
                     int newGreen = (int)(originalPixels[index + 1] * greenFactor);
                     int newBlue = (int)(originalPixels[index] * blueFactor);
-
                     newRed = Math.Max(0, Math.Min(255, newRed));
                     newGreen = Math.Max(0, Math.Min(255, newGreen));
                     newBlue = Math.Max(0, Math.Min(255, newBlue));
-
                     modifiedPixels[index + 2] = (byte)newRed;
                     modifiedPixels[index + 1] = (byte)newGreen;
                     modifiedPixels[index] = (byte)newBlue;
                     modifiedPixels[index + 3] = 255;
                 }
             });
-
             Marshal.Copy(modifiedPixels, 0, modifiedData.Scan0, modifiedPixels.Length);
-
             originalImage.UnlockBits(originalData);
             modifiedImage.UnlockBits(modifiedData);
+            return modifiedImage;
+        }
 
+
+
+        public Bitmap ColorsAsm(Bitmap originalImage, int trackBarRed, int trackBarGreen, int trackBarBlue, int numOfThreads)
+        {
+            int defaultRedValue = 0;
+            int defaultGreenValue = 0;
+            int defaultBlueValue = 0;
+            if (trackBarRed == defaultRedValue && trackBarGreen == defaultGreenValue && trackBarBlue == defaultBlueValue)
+            {
+                return new Bitmap(originalImage);
+            }
+
+            Bitmap modifiedImage = new Bitmap(originalImage);
+
+            Rectangle rect = new Rectangle(0, 0, originalImage.Width, originalImage.Height);
+            BitmapData modifiedData = modifiedImage.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            int pixelCount = originalImage.Width * originalImage.Height;
+            IntPtr ptr = modifiedData.Scan0;
+
+            float redFactor = 1.0f + trackBarRed / 100.0f;
+            float greenFactor = 1.0f + trackBarGreen / 100.0f;
+            float blueFactor = 1.0f + trackBarBlue / 100.0f;
+
+            AdjustColorsAsm(ptr, pixelCount, redFactor, greenFactor, blueFactor);
+
+            modifiedImage.UnlockBits(modifiedData);
             return modifiedImage;
         }
     }
 }
+
+    
