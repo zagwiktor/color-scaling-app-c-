@@ -1,2 +1,2 @@
 LIBRARY AsmDLL
-EXPORTS AdjustColorsAsm
+EXPORTS MyProc1

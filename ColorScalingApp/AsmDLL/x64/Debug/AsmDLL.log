@@ -1,2 +1,3 @@
-﻿LINK : error LNK2001: nierozpoznany symbol zewnętrzny _DllMainCRTStartup
-C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\x64\Debug\AsmDLL.dll : fatal error LNK1120: liczba nierozpoznanych elementów zewnętrznych: 1
+﻿  Assembling color.asm...
+     Trwa tworzenie biblioteki C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\x64\Debug\AsmDLL.lib i obiektu C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\x64\Debug\AsmDLL.exp
+  AsmDLL.vcxproj -> C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\x64\Debug\AsmDLL.dll

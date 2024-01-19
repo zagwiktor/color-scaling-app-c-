@@ -9,90 +9,95 @@ namespace ColorScalingDLL
 {
     public class Class1
     {
-        [DllImport(@"C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\x64\Release\AsmDLL.dll")]
-        static extern int AdjustColorsAsm(IntPtr imageBuffer, int pixelCount, float redMultiplier, float greenMultiplier, float blueMultiplier);
+        [DllImport(@"C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\x64\Debug\AsmDLL.dll")]
+        static extern int MyProc1(byte[] pixelsdouble, double redFactor, double greenFactor, double blueFactor, int y, int x, int stride);
+
 
         public Bitmap AdjustColors(Bitmap originalImage, int trackBarRed, int trackBarGreen, int trackBarBlue, int numOfThreads)
         {
-            int defaultRedValue = 0;
-            int defaultGreenValue = 0;
-            int defaultBlueValue = 0;
-            if (trackBarRed == defaultRedValue && trackBarGreen == defaultGreenValue && trackBarBlue == defaultBlueValue)
+
+            if (trackBarRed == 0 && trackBarGreen == 0 && trackBarBlue == 0)
             {
-                return new Bitmap(originalImage);
+                return new Bitmap(originalImage); 
             }
 
             Bitmap modifiedImage = new Bitmap(originalImage);
-
             float redFactor = 1.0f + trackBarRed / 100.0f;
             float greenFactor = 1.0f + trackBarGreen / 100.0f;
             float blueFactor = 1.0f + trackBarBlue / 100.0f;
 
-            Rectangle rect = new Rectangle(0, 0, originalImage.Width, originalImage.Height);
-            BitmapData originalData = originalImage.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-            BitmapData modifiedData = modifiedImage.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+            Rectangle rect = new Rectangle(0, 0, modifiedImage.Width, modifiedImage.Height);
+            BitmapData modifiedData = modifiedImage.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
             int bytesPerPixel = 4;
-            int height = rect.Height;
-            int width = rect.Width;
-            int stride = originalData.Stride;
+            int stride = modifiedData.Stride;
+            byte[] pixels = new byte[stride * rect.Height];
 
-            byte[] originalPixels = new byte[stride * height];
-            byte[] modifiedPixels = new byte[stride * height];
+            Marshal.Copy(modifiedData.Scan0, pixels, 0, pixels.Length);
 
-            Marshal.Copy(originalData.Scan0, originalPixels, 0, originalPixels.Length);
-
-            Parallel.For(0, height, new ParallelOptions { MaxDegreeOfParallelism = numOfThreads }, y =>
+            Parallel.For(0, rect.Height, new ParallelOptions { MaxDegreeOfParallelism = numOfThreads }, y =>
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < rect.Width; x++)
                 {
                     int index = y * stride + x * bytesPerPixel;
-                    int newRed = (int)(originalPixels[index + 2] * redFactor);
-                    int newGreen = (int)(originalPixels[index + 1] * greenFactor);
-                    int newBlue = (int)(originalPixels[index] * blueFactor);
-                    newRed = Math.Max(0, Math.Min(255, newRed));
-                    newGreen = Math.Max(0, Math.Min(255, newGreen));
-                    newBlue = Math.Max(0, Math.Min(255, newBlue));
-                    modifiedPixels[index + 2] = (byte)newRed;
-                    modifiedPixels[index + 1] = (byte)newGreen;
-                    modifiedPixels[index] = (byte)newBlue;
-                    modifiedPixels[index + 3] = 255;
+                    int newRed = (int)(pixels[index + 2] * redFactor);
+                    int newGreen = (int)(pixels[index + 1] * greenFactor);
+                    int newBlue = (int)(pixels[index] * blueFactor);
+
+                    pixels[index + 2] = (byte)Math.Max(0, Math.Min(255, newRed));
+                    pixels[index + 1] = (byte)Math.Max(0, Math.Min(255, newGreen));
+                    pixels[index] = (byte)Math.Max(0, Math.Min(255, newBlue));
+                    
                 }
             });
-            Marshal.Copy(modifiedPixels, 0, modifiedData.Scan0, modifiedPixels.Length);
-            originalImage.UnlockBits(originalData);
+
+            Marshal.Copy(pixels, 0, modifiedData.Scan0, pixels.Length);
             modifiedImage.UnlockBits(modifiedData);
+
             return modifiedImage;
         }
-
 
 
         public Bitmap ColorsAsm(Bitmap originalImage, int trackBarRed, int trackBarGreen, int trackBarBlue, int numOfThreads)
         {
-            int defaultRedValue = 0;
-            int defaultGreenValue = 0;
-            int defaultBlueValue = 0;
-            if (trackBarRed == defaultRedValue && trackBarGreen == defaultGreenValue && trackBarBlue == defaultBlueValue)
+            if (trackBarRed == 0 && trackBarGreen == 0 && trackBarBlue == 0)
             {
-                return new Bitmap(originalImage);
+                return new Bitmap(originalImage); 
             }
 
             Bitmap modifiedImage = new Bitmap(originalImage);
+            double redFactor = 1.0f + trackBarRed / 100.0f;
+            double greenFactor = 1.0f + trackBarGreen / 100.0f;
+            double blueFactor = 1.0f + trackBarBlue / 100.0f;
 
-            Rectangle rect = new Rectangle(0, 0, originalImage.Width, originalImage.Height);
+            Rectangle rect = new Rectangle(0, 0, modifiedImage.Width, modifiedImage.Height);
             BitmapData modifiedData = modifiedImage.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-            int pixelCount = originalImage.Width * originalImage.Height;
-            IntPtr ptr = modifiedData.Scan0;
 
-            float redFactor = 1.0f + trackBarRed / 100.0f;
-            float greenFactor = 1.0f + trackBarGreen / 100.0f;
-            float blueFactor = 1.0f + trackBarBlue / 100.0f;
+            int bytesPerPixel = 4;
+            int stride = modifiedData.Stride;
+            byte[] pixels = new byte[stride * rect.Height];
 
-            AdjustColorsAsm(ptr, pixelCount, redFactor, greenFactor, blueFactor);
+            Marshal.Copy(modifiedData.Scan0, pixels, 0, pixels.Length);
 
+
+            Parallel.For(0, rect.Height, new ParallelOptions { MaxDegreeOfParallelism = numOfThreads }, y =>
+            {
+                for (int x = 0; x < rect.Width; x++) 
+                {
+                    
+                    int index = y * stride + x * bytesPerPixel;
+                    MyProc1(pixels, redFactor, greenFactor, blueFactor, y, x, stride);
+                }
+            });
+
+
+            Marshal.Copy(pixels, 0, modifiedData.Scan0, pixels.Length);
             modifiedImage.UnlockBits(modifiedData);
+
             return modifiedImage;
         }
+
+     
     }
 }
 

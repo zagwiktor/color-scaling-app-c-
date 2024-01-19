@@ -1,0 +1,14 @@
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\bin\x64\Debug\ColorScalingApp.exe.config
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\bin\x64\Debug\ColorScalingApp.exe
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\bin\x64\Debug\ColorScalingApp.pdb
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\bin\x64\Debug\ColorScalingDLL.dll
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\bin\x64\Debug\ColorScalingDLL.pdb
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\obj\x64\Debug\ColorScalingApp.csproj.AssemblyReference.cache
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\obj\x64\Debug\ColorScalingApp.csproj.SuggestedBindingRedirects.cache
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\obj\x64\Debug\ColorScalingApp.Form1.resources
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\obj\x64\Debug\ColorScalingApp.Properties.Resources.resources
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\obj\x64\Debug\ColorScalingApp.csproj.GenerateResource.cache
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\obj\x64\Debug\ColorScalingApp.csproj.CoreCompileInputs.cache
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\obj\x64\Debug\ColorScalingApp.csproj.CopyComplete
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\obj\x64\Debug\ColorScalingApp.exe
+C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\ColorScalingApp\obj\x64\Debug\ColorScalingApp.pdb

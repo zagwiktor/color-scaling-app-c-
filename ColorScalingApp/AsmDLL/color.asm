@@ -1,61 +1,109 @@
 .code
-AdjustColorsAsm proc
-    push rbp
-    mov rbp, rsp
 
-    mov rax, rcx          ; wskaŸnik na tablicê bajtów obrazu
-    mov rcx, rdx          ; liczba pikseli
-    mov ebx, r8d          ; mno¿nik dla czerwonego (przeskalowany do 32-bitowej wartoœci)
-    mov r8d, r9d          ; mno¿nik dla zielonego (przeskalowany do 32-bitowej wartoœci)
-    mov r9d, [rbp+16]     ; mno¿nik dla niebieskiego (przeskalowany do 32-bitowej wartoœci)
+;(byte[] pixelsdouble, double redFactor, double greenFactor, double blueFactor, int y, int x, int stride);
 
-pixel_loop:
-    test rcx, rcx         ; sprawdŸ, czy pozosta³y jeszcze piksele do przetworzenia
-    jz loop_end           ; jeœli nie, zakoñcz pêtlê
+MyProc1 PROC
 
-    ; Modyfikacja kana³u niebieskiego
-    movzx r10d, byte ptr [rax]   ; wczytanie niebieskiego kana³u
-    imul r10d, r9d               ; mno¿enie przez mno¿nik
-    mov r11d, 100                ; sta³a reprezentuj¹ca 100%
-    idiv r11d                    ; dzielenie przez 100
-    cmp r10d, 0FFh               ; ograniczenie wartoœci do zakresu 0-255
-    jle no_clamp_blue
-    mov r10d, 0FFh
+	mov rcx, rcx			;RCX -> pixels[]
+	movaps xmm0, xmm1		;xmm0 -> redFactor
+ 	movaps xmm1, xmm2		;xmm1 -> greenFactor
+	movaps xmm2, xmm3		;xmm2 -> blueFactor
+	xorps xmm3, xmm3
+	mov r9, rsi				;r9 -> stride
+	mov r10, [rsp + 40]		;r10 -> y
+	mov r11, [rsp + 48]		;r11 -> x
+	xor r12, r12
+	
+	
+	mov r8, r10				;w r8 jest y
+	imul r8, r9
+	mov r12, r11
+	imul r12, 4
+	add r8, r12				;index w r8		
+	xor r12, r12
 
-no_clamp_blue:
-    mov [rax], r10b              ; zapisanie zmodyfikowanego kana³u niebieskiego
+	;ZAJETE REJESTRY RCX, XMM0-2, R8-11
 
-    ; Modyfikacja kana³u zielonego
-    movzx r10d, byte ptr [rax+1] ; wczytanie zielonego kana³u
-    imul r10d, r8d               ; mno¿enie przez mno¿nik
-    idiv r11d                    ; dzielenie przez 100
-    cmp r10d, 0FFh               ; ograniczenie wartoœci do zakresu 0-255
-    jle no_clamp_green
-    mov r10d, 0FFh
+	;KANAL NIEBIESKI MODYFIKACJA------------------------------------------------------------------------------
 
-no_clamp_green:
-    mov [rax+1], r10b            ; zapisanie zmodyfikowanego kana³u zielonego
+  
+	movzx r12d, byte ptr [rcx + r8]				;w r9d wartoœæ blue 								
+	cvtsi2sd xmm3, r12d							;rzutownaie originalPixels[index] w r12d i przenieœ do xmm3
+	xor r12d, r12d								;zerowanie r12d
+	mulpd xmm3, xmm2							;originalPixels[index] * blueFactor
+	CVTTSD2SI r12d, xmm3						;w r12d newBlue
 
-    ; Modyfikacja kana³u czerwonego
-    movzx r10d, byte ptr [rax+2] ; wczytanie czerwonego kana³u
-    imul r10d, ebx               ; mno¿enie przez mno¿nik
-    idiv r11d                    ; dzielenie przez 100
-    cmp r10d, 0FFh               ; ograniczenie wartoœci do zakresu 0-255
-    jle no_clamp_red
-    mov r10d, 0FFh
+	cmp r12d, 0									;porownaj newBlue z 0
+	jl LessThanZero								;skocz, jeœli newBlue < 0
+	cmp r12d, 255								;porównaj newBlue z 255
+	jg GreaterThan255							;skocz, jeœli newBlue > 255
+	jmp Continue								;kontynuuj, jeœli newBlue jest w zakresie 0-255
 
-no_clamp_red:
-    mov [rax+2], r10b ; zapisanie zmodyfikowanego kana³u czerwonego
+LessThanZero:
+	mov r12d, 0									;ustaw newBlue na 0				
+	jmp Continue								
 
-    ; Przejœcie do nastêpnego piksela
-    add rax, 4
-    dec rcx
-    jmp pixel_loop
+GreaterThan255:
+	mov r12d, 255								;ustaw newBlue na 255
+	
+Continue:
+	mov byte ptr [rcx + r8], r12b
+	xor r12d, r12d
+	xorps xmm3, xmm3
 
-loop_end:
-mov rsp, rbp
-pop rbp
+	;KANAL ZIELONY MODYFIKACJA-----------------------------------------------------------------------------------
+
+
+	movzx r12d, byte ptr [rcx + r8 + 1]			 								
+	cvtsi2sd xmm3, r12d							
+	xor r12d, r12d								
+	mulpd xmm3, xmm1							
+	CVTTSD2SI r12d, xmm3						
+
+	cmp r12d, 0									
+	jl LessThanZeroGreen						
+	cmp r12d, 255								
+	jg GreaterThan255Green						
+	jmp ContinueGreen							
+
+LessThanZeroGreen:
+	mov r12d, 0											
+	jmp Continue								
+
+GreaterThan255Green:
+	mov r12d, 255								;ustaw newBlue na 255
+	
+ContinueGreen:
+	mov byte ptr [rcx + r8 + 1], r12b
+	xor r12d, r12d
+	xorps xmm3, xmm3
+
+	;KANAL CZERWONY MODYFIKACJA-----------------------------------------------------------------------------------
+
+	movzx r12d, byte ptr [rcx + r8 + 2]										
+	cvtsi2sd xmm3, r12d							
+	xor r12d, r12d								
+	mulpd xmm3, xmm0							
+	CVTTSD2SI r12d, xmm3						
+
+	cmp r12d, 0									
+	jl LessThanZeroRed							
+	cmp r12d, 255								
+	jg GreaterThan255Red						
+	jmp ContinueRed								
+
+LessThanZeroRed:
+	mov r12d, 0											
+	jmp Continue								
+
+GreaterThan255Red:
+	mov r12d, 255								
+	
+ContinueRed:
+	mov byte ptr [rcx + r8 + 2], r12b
+	xor r12d, r12d
+	xorps xmm3, xmm3
+
 ret
-
-AdjustColorsAsm endp
+MyProc1 ENDP
 end
