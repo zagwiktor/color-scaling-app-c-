@@ -14,6 +14,7 @@ namespace ColorScalingApp
         public Form1()
         {
             InitializeComponent();
+            currNumOfThreads.Text = Environment.ProcessorCount.ToString();
         }
         private void setModifiedImage()
         {
@@ -34,7 +35,10 @@ namespace ColorScalingApp
                 
             }
         }
-       
+
+        /// <summary>
+        /// Function responsible for loading a photo into the application.
+        /// </summary>
         private void loadImageButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -56,6 +60,9 @@ namespace ColorScalingApp
             }
         }
 
+        /// <summary>
+        /// Function responsible for clearing images.
+        /// </summary>
         private void clearImageButton_Click(object sender, EventArgs e)
         {
             oryginalImageField.Image = null;
@@ -64,6 +71,10 @@ namespace ColorScalingApp
             modifiedImage = null;
         }
 
+
+        /// <summary>
+        /// Function responsible for saving a photo into the application.
+        /// </summary>
         private void scaleRgbButton_Click(object sender, EventArgs e)
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -72,6 +83,9 @@ namespace ColorScalingApp
             MessageBox.Show("threads: " + numOfThreds() + ", time elapsed: " + watch.ElapsedMilliseconds + "ms", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        /// <summary>
+        /// Function checking how many threads have been selected.
+        /// </summary>
         private void saveButton_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog saveFileDialog = new FolderBrowserDialog();
@@ -97,6 +111,11 @@ namespace ColorScalingApp
                 MessageBox.Show("No modified image to save.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        /// <summary>
+        /// Function checking how many threads have been selected.
+        /// </summary>
+        /// <returns>Numbers of threads.</returns>
         private int numOfThreds() 
         {
             if (thred1.Checked == true) 
@@ -127,10 +146,87 @@ namespace ColorScalingApp
             {
                 return 64;
             }
+            if (sliderThread.Checked == true)
+            {
+                return trackBar1.Value;
+            }
+
             int processorCount = Environment.ProcessorCount;
             return processorCount;
         }
 
-   
+        
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            if (sliderThread.Checked == true)
+            {
+                currNumOfThreads.Text = trackBar1.Value.ToString();
+            }
+        }
+
+        private void defNumOfThreads_CheckedChanged(object sender, EventArgs e)
+        {
+            currNumOfThreads.Text = Environment.ProcessorCount.ToString();
+        }
+
+        private void thred1_CheckedChanged(object sender, EventArgs e)
+        {
+            currNumOfThreads.Text = 1.ToString();
+        }
+
+        private void thred2_CheckedChanged(object sender, EventArgs e)
+        {
+            currNumOfThreads.Text = 2.ToString();
+        }
+
+        private void thred4_CheckedChanged(object sender, EventArgs e)
+        {
+            currNumOfThreads.Text = 4.ToString();
+        }
+
+        private void thred8_CheckedChanged(object sender, EventArgs e)
+        {
+            currNumOfThreads.Text = 8.ToString();
+        }
+
+        private void thred16_CheckedChanged(object sender, EventArgs e)
+        {
+            currNumOfThreads.Text = 16.ToString();
+        }
+
+        private void thred32_CheckedChanged(object sender, EventArgs e)
+        {
+            currNumOfThreads.Text = 32.ToString();
+        }
+
+        private void thred64_CheckedChanged(object sender, EventArgs e)
+        {
+            currNumOfThreads.Text = 64.ToString();
+        }
+
+        private void sliderThread_CheckedChanged(object sender, EventArgs e)
+        {
+            currNumOfThreads.Text = trackBar1.Value.ToString();
+        }
+
+        private void trackBarRed_Scroll(object sender, EventArgs e)
+        {
+            float redFactor = (float)Math.Round((1.0f + trackBarRed.Value / 100.0f), 2);
+            valueOfRed.Text = redFactor.ToString();
+        }
+
+        private void trackBarGreen_Scroll(object sender, EventArgs e)
+        {
+            float greenFactor = (float)Math.Round((1.0f + trackBarGreen.Value / 100.0f), 2);
+            valueOfGreen.Text = greenFactor.ToString();
+        }
+
+        private void trackBarBlue_Scroll(object sender, EventArgs e)
+        {
+            float blueFactor = (float)Math.Round((1.0f + trackBarBlue.Value / 100.0f), 2);
+
+            valueOfBlue.Text = blueFactor.ToString();
+        }
     }
 }
