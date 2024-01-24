@@ -7,5 +7,5 @@ The aim of the project was to investigate how the number of threads affects the 
 
 ## The appearance of the GUI 
 
-![Alt text](images readme/file.png)
-![Alt text](images readme/file_2.png)
+![image](https://github.com/zagwiktor/color-scaling-app-c-/assets/92055936/42fee90d-0caf-40a2-9f57-5b61ff5dfe67)
+
