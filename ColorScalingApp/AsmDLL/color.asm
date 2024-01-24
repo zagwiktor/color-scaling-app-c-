@@ -24,10 +24,10 @@ AdjustColorsAsm PROC
 	;KANAL NIEBIESKI MODYFIKACJA------------------------------------------------------------------------------
 
 	movzx r12d, byte ptr [rcx + r8]				;w r12d wartoœæ blue 								
-	cvtsi2sd xmm3, r12d							;rzutownaie pixel[index] w r12d i przenieœ do xmm3
+	cvtsi2ss xmm3, r12d							;rzutownaie pixel[index] w r12d i przenieœ do xmm3
 	xor r12d, r12d								;zerowanie r12d
-	mulpd xmm3, xmm2							;pixel[index] * blueFactor
-	CVTTSD2SI r12d, xmm3						;w r12d newBlue
+	vmulps xmm3, xmm3, xmm2 					;pixel[index] * blueFactor
+	cvtss2si r12d, xmm3							;w r12d newBlue
 
 	cmp r12d, 0									;porownaj newBlue z 0
 	jl LessThanZero								;skocz, jeœli newBlue < 0
@@ -47,13 +47,13 @@ Continue:
 	xor r12d, r12d
 	xorps xmm3, xmm3
 
-	;KANAL ZIELONY MODYFIKACJA-----------------------------------------------------------------------------------
+	;KANAL ZIELONY MODYFIKACJA----------------------------------------------------------------------------------
 
 	movzx r12d, byte ptr [rcx + r8 + 1]			;w r12d wartoœæ green								
-	cvtsi2sd xmm3, r12d							;rzutownaie pixel[index] w r12d i przenieœ do xmm3
+	cvtsi2ss xmm3, r12d							;rzutownaie pixel[index] w r12d i przenieœ do xmm3
 	xor r12d, r12d								;zerowanie r12d
-	mulpd xmm3, xmm1							;pixel[index] * greenFactor
-	CVTTSD2SI r12d, xmm3						;w r12d newGreen
+	vmulps xmm3, xmm3, xmm1						;pixel[index] * greenFactor
+	cvtss2si r12d, xmm3							;w r12d newGreen
 
 	cmp r12d, 0									;porownaj newGreen z 0
 	jl LessThanZeroGreen						;skocz, jeœli newGreen < 0
@@ -73,13 +73,13 @@ ContinueGreen:
 	xor r12d, r12d
 	xorps xmm3, xmm3
 
-	;KANAL CZERWONY MODYFIKACJA-----------------------------------------------------------------------------------
+	;KANAL CZERWONY MODYFIKACJA----------------------------------------------------------------------------------
 
 	movzx r12d, byte ptr [rcx + r8 + 2]			;w r12d wartoœæ red								
-	cvtsi2sd xmm3, r12d							;rzutownaie pixel[index] w r12d i przenieœ do xmm3
+	cvtsi2ss xmm3, r12d							;rzutownaie pixel[index] w r12d i przenieœ do xmm3
 	xor r12d, r12d								;zerowanie r12d
-	mulpd xmm3, xmm0							;pixel[index] * redFactor
-	CVTTSD2SI r12d, xmm3						;w r12d newRed
+	vmulps xmm3, xmm3, xmm0						;pixel[index] * redFactor
+	cvtss2si r12d, xmm3							;w r12d newRed
 
 	cmp r12d, 0									;porownaj newRed z 0
 	jl LessThanZeroRed							;skocz, jeœli newRed < 0

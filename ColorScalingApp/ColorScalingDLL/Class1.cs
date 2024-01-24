@@ -10,7 +10,7 @@ namespace ColorScalingDLL
     public class Class1
     {
         [DllImport(@"C:\Users\zagwi\OneDrive\Pulpit\SZKOLA\Semestr 5\JA\Projekt\ColorScalingApp\x64\Debug\AsmDLL.dll")]
-        static extern int AdjustColorsAsm(byte[] pixelsdouble, double redFactor, double greenFactor, double blueFactor, int y, int x, int stride);
+        static extern int AdjustColorsAsm(byte[] pixelsdouble, float redFactor, float greenFactor, float blueFactor, int y, int x, int stride);
 
 
         /// <summary>
@@ -60,7 +60,6 @@ namespace ColorScalingDLL
                     pixels[index + 2] = (byte)Math.Max(0, Math.Min(255, newRed));
                     pixels[index + 1] = (byte)Math.Max(0, Math.Min(255, newGreen));
                     pixels[index] = (byte)Math.Max(0, Math.Min(255, newBlue));
-                    
                 }
             });
 
@@ -90,9 +89,9 @@ namespace ColorScalingDLL
 
             Bitmap modifiedImage = new Bitmap(originalImage);
             //Calculation of coefficients.
-            double redFactor = 1.0f + trackBarRed / 100.0f;
-            double greenFactor = 1.0f + trackBarGreen / 100.0f;
-            double blueFactor = 1.0f + trackBarBlue / 100.0f;
+            float redFactor = 1.0f + trackBarRed / 100.0f;
+            float greenFactor = 1.0f + trackBarGreen / 100.0f;
+            float blueFactor = 1.0f + trackBarBlue / 100.0f;
 
             ////Creation of a bitmap object with dimensions the same as the original image.
             Rectangle rect = new Rectangle(0, 0, modifiedImage.Width, modifiedImage.Height);

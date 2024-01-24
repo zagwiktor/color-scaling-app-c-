@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ColorScalingApp
@@ -16,21 +17,52 @@ namespace ColorScalingApp
             InitializeComponent();
             currNumOfThreads.Text = Environment.ProcessorCount.ToString();
         }
-        private void setModifiedImage()
+
+        /// <summary>
+        /// The function that calls methods from the dynamic library ColorScalingDLL, which are used for image modification.
+        /// </summary>
+        private async void setModifiedImage()
         {
+            
             if (originalImage != null)
             {
+                var watch = System.Diagnostics.Stopwatch.StartNew();
                 if (asmRButton.Checked)
                 {
-                    modifiedImage = colorScalingDLL.ColorsAsm(originalImage, trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value, numOfThreds());
+                    await Task.Run(() =>
+                    {
+                        modifiedImage = colorScalingDLL.ColorsAsm(originalImage, trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value, numOfThreds());
+                        watch.Stop();
+                    });
                     modifiedImageBox.SizeMode = PictureBoxSizeMode.Zoom;
                     modifiedImageBox.Image = new Bitmap(modifiedImage);
+                    if (modifiedImage != null)
+                    {
+                        MessageBox.Show("threads: " + numOfThreds() + ", time elapsed: " + watch.ElapsedMilliseconds + "ms", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("First load an image.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 if (cRButton.Checked) 
                 {
-                    modifiedImage = colorScalingDLL.AdjustColors(originalImage, trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value, numOfThreds());
+                    await Task.Run(() =>
+                    {
+                        modifiedImage = colorScalingDLL.AdjustColors(originalImage, trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value, numOfThreds());
+                        watch.Stop();
+                    });
                     modifiedImageBox.SizeMode = PictureBoxSizeMode.Zoom;
                     modifiedImageBox.Image = new Bitmap(modifiedImage);
+                    if (modifiedImage != null)
+                    {
+                        MessageBox.Show("threads: " + numOfThreds() + ", time elapsed: " + watch.ElapsedMilliseconds + "ms", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("First load an image.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
                 }
                 
             }
@@ -39,8 +71,9 @@ namespace ColorScalingApp
         /// <summary>
         /// Function responsible for loading a photo into the application.
         /// </summary>
-        private void loadImageButton_Click(object sender, EventArgs e)
+        private async void loadImageButton_Click(object sender, EventArgs e)
         {
+            
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files (*.png; *.jpg; *.bmp)|*.png;*.jpg;*.bmp|All files (*.*)|*.*";
             openFileDialog.Title = "Please select image";
@@ -48,14 +81,21 @@ namespace ColorScalingApp
             {
                 try
                 {
-                    originalImage = new Bitmap(openFileDialog.FileName);
-                    oryginalImageField.SizeMode = PictureBoxSizeMode.Zoom;
-                    oryginalImageField.Image = originalImage;
-                    modifiedImage = new Bitmap(originalImage);
+                    await Task.Run(() =>
+                    {
+                        originalImage = new Bitmap(openFileDialog.FileName);
+                        oryginalImageField.SizeMode = PictureBoxSizeMode.Zoom;
+                        oryginalImageField.Image = originalImage;
+                        modifiedImage = new Bitmap(originalImage);
+                    });
+                    
                 }
                 catch (Exception ex)
-                { 
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                {
+                    await Task.Run(() =>
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);   
+                    });
                 }
             }
         }
@@ -73,20 +113,17 @@ namespace ColorScalingApp
 
 
         /// <summary>
-        /// Function responsible for saving a photo into the application.
+        /// The function determines the program's behavior upon pressing the 'Scale' button.
         /// </summary>
         private void scaleRgbButton_Click(object sender, EventArgs e)
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            setModifiedImage();
-            watch.Stop();
-            MessageBox.Show("threads: " + numOfThreds() + ", time elapsed: " + watch.ElapsedMilliseconds + "ms", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            setModifiedImage();  
         }
 
         /// <summary>
         /// Function checking how many threads have been selected.
         /// </summary>
-        private void saveButton_Click(object sender, EventArgs e)
+        private async void saveButton_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog saveFileDialog = new FolderBrowserDialog();
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -95,14 +132,21 @@ namespace ColorScalingApp
                 {
                     try
                     {
-                        string fileName = $"modified_image_{DateTime.Now:yyyyMMdd_HHmmss}.png";
-                        string filePath = Path.Combine(saveFileDialog.SelectedPath, fileName);
-                        modifiedImage.Save(filePath, ImageFormat.Png);
-                        MessageBox.Show("Modified image saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        await Task.Run(() =>
+                        {
+                            string fileName = $"modified_image_{DateTime.Now:yyyyMMdd_HHmmss}.png";
+                            string filePath = Path.Combine(saveFileDialog.SelectedPath, fileName);
+                            modifiedImage.Save(filePath, ImageFormat.Png);
+                            MessageBox.Show("Modified image saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        });
+                        
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("An error occurred while saving the image: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        await Task.Run(() =>
+                        {
+                            MessageBox.Show("An error occurred while saving the image: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                     }
                 }
             }
@@ -156,7 +200,6 @@ namespace ColorScalingApp
         }
 
         
-
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             if (sliderThread.Checked == true)
